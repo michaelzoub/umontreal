@@ -30,8 +30,7 @@ export function Map({ response }: { response: { lng: number; lat: number } }) {
                 return
             }
 
-            const fetchedGeolocArray = body.body
-            console.log(fetchedGeolocArray[0].geoloc)
+            const fetchedGeolocArray = body.body || []
 
         map.current = new mapboxgl.Map({
             container: mapContainer.current!, // ID of the HTML element to render the map
