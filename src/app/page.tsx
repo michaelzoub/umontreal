@@ -265,7 +265,7 @@ export default function Home() {
     </div>
     <div className="flex flex-row w-full h-[90%]">
       <div className="mt-10 w-full px-6 h-[90%] overflow-scroll mb-20 md:w-[50%]" key="key">
-        {fetchedEvents.map((e: any) => 
+        {fetchedEvents?.map((e: any) => 
           <button className={`${e.university.toLowerCase().includes(schoolOfTheWeek.toLowerCase()) ? "flex flex-row w-full overflow-hidden justify-between text-white mx-0 my-4 rounded-md border-[2px] border-blue-500 shadow md:mx-6 md:w-[75%] transition ease-in-out hover:scale-105" : "flex flex-row w-full overflow-hidden justify-between text-white mx-0 my-2 rounded-md border-[2px] border-white shadow md:mx-6 md:w-[75%] transition ease-in-out hover:scale-105"}`} key={e.id} value={e} onClick={() => setSpecificEvent(e)}>
             <div className="flex flex-row gap-4">
               <Image src={imageObject[e.university.toLowerCase()]} alt="University logo" width={50} height={50} className="p-2"></Image>
