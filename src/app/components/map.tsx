@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 
 
 export function Map({ response }: { response: { lng: number; lat: number } }) {
-    const token: any = process.env.MAPBOX_TOKEN
+    const token: any = process.env.NEXT_PUBLIC_MAPBOX_TOKEN
     mapboxgl.accessToken = token
 
     const map = useRef<mapboxgl.Map | null>(null)
