@@ -11,8 +11,6 @@ export function Map({ response }: { response: { lng: number; lat: number } }) {
     const markersRef = useRef<mapboxgl.Marker[]>([])
     const [markers, setMarkers] = useState<mapboxgl.Marker[]>([])
 
-    const test = [[-73.5728, 45.50283], [-73.3420, 45.50283]]
-
     useEffect(() => {
 
         async function fetchCoordinates() {
@@ -93,6 +91,6 @@ export function Map({ response }: { response: { lng: number; lat: number } }) {
     ]
 
     return (
-        <div ref={mapContainer!} className="z-10 rounded-md" style={{ width: '100%', height: '100%' }}></div>
+        <div ref={mapContainer!} className="relative z-20 rounded-lg h-[350px] md:h-[100%] w-[100%]"></div>
     )
 }

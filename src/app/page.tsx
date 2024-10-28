@@ -193,6 +193,7 @@ export default function Home() {
 
   return (
   <main className="flex flex-col h-screen w-full bg-zinc-900 overflow-hidden overflow-scroll overflow-x-hidden md:overflow-hidden md:overflow-x-visible">
+    <link className={`${publishBox || specificEvent ? "hidden" : "visible"}`} href='https://api.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.css' rel='stylesheet' />
     <div className={`${publishBox ? "z-50 absolute text-white w-full h-screen backdrop-blur px-[20px] md:px-[100px] pt-10" : "hidden"}`}>
       <div className="flex flex-col w-full p-10 mx-auto my-auto rounded-md bg-zinc-800 border-[2px] border-zinc-700 overflow-hidden md:w-[650px]">
         <div className="flex flex-col justify-between">
@@ -259,7 +260,7 @@ export default function Home() {
       </div>
     </div>
     <header className="flex flex-row w-full h-[13%] justify-between">
-      <div className="flex flex-col text-white gap-2 m-2 mx-6">
+      <div className="flex flex-col text-white gap-2 m-2 ml-6">
         <div className="text-3xl font-semibold">uMontreal</div>
         <div className="w-44 md:w-[410px]">Montreal's destination for college/university events and parties.</div>
         <div className="flex flex-row gap-2 my-auto">
@@ -267,10 +268,9 @@ export default function Home() {
           <div className="my-auto">Party school of the week</div>
         </div>
       </div>
-      <button className="mx-4 my-auto h-fit px-2 py-1 rounded-md text-center bg-blue-500 text-white shadow-inner border-[2px] border-blue-400 transition ease-in-out hover:scale-105" onClick={() => setPublishBox(true)}>Publish Event</button>
+      <button className="mr-4 my-auto h-fit px-2 py-1 rounded-md text-center bg-blue-500 text-white shadow-inner border-[2px] border-blue-400 transition ease-in-out hover:scale-105" onClick={() => setPublishBox(true)}>Publish Event</button>
     </header>
-    <div className="visible mt-[100px] h-[73%] px-6 rounded-md md:w-[50%] md:hidden">
-      <link className={`${publishBox || specificEvent ? "hidden" : "visible"}`} href='https://api.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.css' rel='stylesheet' />
+    <div className="visible mt-[50px] mb-[30px] h-[300px] px-6 rounded-md md:w-[50%] md:hidden">
       <Map response={mapLatLong}></Map>
     </div>
     <div className="flex flex-row w-full h-[90%]">
@@ -285,8 +285,7 @@ export default function Home() {
           </button>
         )}
       </div>
-      <div className="absolute right-[10000px] md:w-[50%] md:visible md:relative md:mr-0 md:right-0">
-        <link className={`${publishBox || specificEvent ? "hidden" : "visible"}`} href='https://api.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.css' rel='stylesheet' />
+      <div className="absolute rounded-md right-[10000px] md:w-[50%] md:visible md:relative md:mr-0 md:right-0">
         <Map response={mapLatLong}></Map>
       </div>
     </div>
