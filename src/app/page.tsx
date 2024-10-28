@@ -270,7 +270,7 @@ export default function Home() {
       </div>
       <button className="mr-4 my-auto h-fit px-2 py-1 rounded-md text-center bg-blue-500 text-white shadow-inner border-[2px] border-blue-400 transition ease-in-out hover:scale-105" onClick={() => setPublishBox(true)}>Publish Event</button>
     </header>
-    <div className="visible mt-[50px] mb-[30px] h-[300px] px-6 rounded-md md:w-[50%] md:hidden">
+    <div className="visible mt-[90px] mb-[30px] h-[300px] px-6 rounded-md md:w-[50%] md:hidden">
       <Map response={mapLatLong}></Map>
     </div>
     <div className="flex flex-row w-full h-[90%]">
