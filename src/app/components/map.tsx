@@ -64,9 +64,10 @@ export function Map({ response }: { response: { lng: number; lat: number } }) {
         if (!response) {
             return
         }
+        const {lng, lat} = response
     const newMarker = new mapboxgl.Marker({
         color: "#FFFFFF",
-    }).setLngLat([-73.5728, 45.50283]) //[30.5, 50.5] [lng, lat]
+    }).setLngLat([lng, lat]) //[30.5, 50.5] [lng, lat]
         .addTo(map.current!)
 
     setMarkers(prevMarkers => [...prevMarkers, newMarker])

@@ -91,6 +91,8 @@ export default function Home() {
     console.log("addEvent hit")
     if (!university || !date || !event || !time || !location) {
       setError("Missing fields.")
+    } if (!university.toLowerCase().includes("mcgill") && !university.toLowerCase().includes("concordia") && !university.toLowerCase().includes("hec") && !university.toLowerCase().includes("udem")) {
+      setError("University doesn't exist.")
     } else {
       const response = await fetch("/api/events", {
         method: "POST",
@@ -106,20 +108,29 @@ export default function Home() {
           location: location
         })
       })
+      setError("Success.")
       const log = await response.json()
-      if (log.status == "ok") {
+      if (log.status.includes("ok")) {
         const latLongObject = {
           lng: log.body[0],
           lat: log.body[1]
         }
+        setMapLatLong(latLongObject)
         console.log("response: ", log.body)
         console.log("latLong object: ", latLongObject)
-        setMapLatLong(latLongObject)
-        setError("")
-        setAddEventResponse("Success")
         setTimeout(() => {
+          setError("")
           setAddEventResponse("")
         }, 3000)
+        const object: any = {
+          university: university,
+          date: date,
+          event: event,
+          time: time,
+          price: price,
+          location: location
+        }
+        setFetchedEvents((prev:any) => [])
         setPublishBox(false)
         window.location.reload()
       }
@@ -150,6 +161,8 @@ export default function Home() {
         })
       })
       console.log(response)
+      const date = new Date().toISOString().split('T')[0]
+      setFetchedComments((prev: any) => [...prev, {comment: comment, date: date}])
     } else {
       const id = e.target.value
       const response = await fetch("/api/addcomment", {
@@ -162,10 +175,7 @@ export default function Home() {
           })
         }
       })
-      setCommentListener(true)
-      setTimeout(() => {
-        setCommentListener(false)
-      }, 2000)
+      setFetchedComments((prev: any) => [...prev, comment])
       console.log(response)
     }
   }
@@ -216,7 +226,7 @@ export default function Home() {
             <div className="text-xs text-gray">Location</div>
             <input className="px-2 bg-zinc-600 border-[2px] border-blue-500 rounded-md" placeholder="Address" onChange={(e:any) => setLocation(e.target.value)}></input>
           </div>
-          <div className={`${error ? "px-4 py-[0.5px] text-xs w-fit mx-auto rounded-md bg-red-700 border-[2px] border-red-500 " : "hidden"}`}>{error}</div>
+          <div className={`${error ? `px-4 py-[0.5px] text-xs w-fit mx-auto rounded-md border-[2px] ${error.includes("Success") ? "bg-green-700 border-green-500" : "bg-red-700 border-red-500"}` : "hidden"}`}>{error}</div>
           <button className="mx-auto h-fit px-6 py-1 rounded-md text-center bg-blue-500 text-white shadow-inner border-[2px] border-blue-400 transition ease-in-out hover:scale-105">Submit!</button>
           <div className={`${addEventResponse ? "px-4 py-[0.5px] text-sm w-fit mx-auto rounded-md bg-green-700 border-[2px] border-green-500" : "hidden"}`}>{addEventResponse} ☑</div>
         </form>
@@ -229,7 +239,7 @@ export default function Home() {
           <div className="mx-auto my-2 text-xl">{specificEvent?.event}</div>
         </div>
         <div className="flex flex-row justify-between">
-          <div>{specificEvent?.university}</div>
+          <div>{specificEvent?.event}</div>
           <div>${specificEvent?.price}</div>
         </div>
         <div className="flex flex-row justify-between">

@@ -35,6 +35,7 @@ export async function POST(req: NextRequest) {
         })
         const geoloc = await turnAddressToLngLat(body.location)
         //store geoloc with event id
+        console.log("pre uuid gen")
         const uuid = generateUUID()
         const insert = await collectionGeoloc.insertOne({
             _id: uuid,
