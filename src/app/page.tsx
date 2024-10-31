@@ -220,7 +220,7 @@ export default function Home() {
   }
 
   return (
-  <main className="flex flex-col h-screen w-full bg-zinc-900 overflow-hidden overflow-scroll overflow-x-hidden md:overflow-hidden md:overflow-x-visible">
+  <main className="flex flex-col h-screen w-full bg-zinc-900 overflow-hidden overflow-scroll element overflow-x-hidden md:overflow-hidden md:overflow-x-visible">
     <link className={`${publishBox || specificEvent ? "hidden" : "visible"}`} href='https://api.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.css' rel='stylesheet' />
     <div className={`${publishBox ? "z-50 absolute text-white w-full h-screen backdrop-blur px-[20px] md:px-[100px] pt-10" : "hidden"}`}>
       <div className="flex flex-col w-full p-10 mx-auto my-auto rounded-md bg-zinc-800 border-[2px] border-zinc-700 overflow-hidden md:w-[650px]">
@@ -277,7 +277,7 @@ export default function Home() {
         </div>
         <div className="mt-6">
           <div className="mx-auto w-fit text-lg">Comments:</div>
-          <div className="h-72 overflow-scroll rounded-md border-[2px] border-zinc-500 p-2">
+          <div className="h-72 overflow-scroll element rounded-md border-[2px] border-zinc-500 p-2">
             {updatedComments}
           </div>
           <form onSubmit={addComment} data-key={specificEvent?._id}>
@@ -302,7 +302,7 @@ export default function Home() {
       <Map response={mapLatLong}></Map>
     </div>
     <div className="flex flex-row w-full h-[90%]">
-      <div className="mt-10 w-full px-6 h-[90%] overflow-scroll mb-20 md:w-[50%]" key="key">
+      <div className="mt-10 w-full px-6 h-[90%] overflow-scroll element mb-20 md:w-[50%]" key="key">
         {fetchedEvents?.map((e: any) => 
           <button className={`${e.university.toLowerCase().includes(schoolOfTheWeek.toLowerCase()) ? "flex flex-row w-full overflow-hidden justify-between text-white mx-0 my-4 rounded-md border-[2px] border-blue-500 shadow md:mx-6 md:w-[75%] transition ease-in-out hover:scale-105" : "flex flex-row w-full overflow-hidden justify-between text-white mx-0 my-2 rounded-md border-[2px] border-white shadow md:mx-6 md:w-[75%] transition ease-in-out hover:scale-105"}`} key={e.id} value={e} onClick={() => setSpecificEvent(e)}>
             <div className="flex flex-row gap-4">
