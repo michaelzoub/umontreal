@@ -23,8 +23,10 @@ export async function POST(req: NextRequest) {
         const { db } = await connectToDatabase()
         const collection = await db.collection("Events")
         const collectionGeoloc = await db.collection("Geoloc")
+        const uuid = generateUUID()
         await collection.createIndex({ university: 1 })
         await collection.insertOne({
+            _id: uuid,
             university: body.university,
             uurl: body.uurl,
             date: body.date,
@@ -36,7 +38,6 @@ export async function POST(req: NextRequest) {
         const geoloc = await turnAddressToLngLat(body.location)
         //store geoloc with event id
         console.log("pre uuid gen")
-        const uuid = generateUUID()
         const insert = await collectionGeoloc.insertOne({
             _id: uuid,
             geoloc: geoloc

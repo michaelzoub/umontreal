@@ -36,7 +36,7 @@ export default function Home() {
   const [commentListener, setCommentListener] = useState(false)
 
   const updatedComments = useMemo(() => 
-    fetchedComments.map((e: any, index: number) => 
+    fetchedComments?.map((e: any, index: number) => 
       <div key={index} className="flex flex-row justify-between gap-1 rounded-md hover:bg-zinc-600 px-2 py-[10px]">
         <div className="w-[70%] break-words whitespace-normal">{e.comment}</div>
         <div className="whitespace-nowrap my-auto">{e.date}</div>
@@ -54,8 +54,27 @@ export default function Home() {
         }
       })
       const body = await response.json()
-      console.log(body)
       setFetchedEvents(body)
+      console.log(body)
+      let expiredEventArrayWith: Array<string> = []
+      const currentDate = new Date()
+      const inputDate = new Date(date)
+      currentDate.setHours(0, 0, 0, 0) // Set current date to midnight
+      inputDate.setHours(0, 0, 0, 0)
+      body.forEach((e:any) => {
+        if (currentDate > inputDate) {
+          expiredEventArrayWith.push(e._id)
+      } 
+    })
+    const postToDeleteExpiredDates = await fetch("/api/deleteeventonexpiry", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(expiredEventArrayWith)
+    })
+    const receivedUpdateEventList = await postToDeleteExpiredDates.json()
+    setFetchedEvents(receivedUpdateEventList)
     }
     setSchoolOfTheWeek("McGill")
     fetchEvents()
@@ -74,7 +93,7 @@ export default function Home() {
       const body = await response.json()
       if (body == "Oof") {
         console.log("Error!!")
-        setFetchedComments([{}])
+        setFetchedComments([])
       } else {
         console.log("setFetchedComments")
         setFetchedComments(body.details)
@@ -83,16 +102,24 @@ export default function Home() {
       console.log(body)
     }
     fetchComments()
-  },[specificEvent, comment])
+  },[specificEvent])
 
   async function addEvent(e: any) {
     e.preventDefault()
-
     console.log("addEvent hit")
+    const currentDate = new Date()
+    const inputDate = new Date(date)
+    currentDate.setHours(0, 0, 0, 0) // Set current date to midnight
+    inputDate.setHours(0, 0, 0, 0)
     if (!university || !date || !event || !time || !location) {
       setError("Missing fields.")
+      return
+    } if (inputDate < currentDate) {
+      setError("Incorrect date.")
+      return
     } if (!university.toLowerCase().includes("mcgill") && !university.toLowerCase().includes("concordia") && !university.toLowerCase().includes("hec") && !university.toLowerCase().includes("udem")) {
       setError("University doesn't exist.")
+      return
     } else {
       const response = await fetch("/api/events", {
         method: "POST",
@@ -175,6 +202,7 @@ export default function Home() {
           })
         }
       })
+      setComment("")
       setFetchedComments((prev: any) => [...prev, comment])
       console.log(response)
     }
@@ -206,7 +234,7 @@ export default function Home() {
             <input className="px-2 bg-zinc-600 border-[2px] border-blue-500 rounded-md" placeholder="University" onChange={(e:any) => setUniversity(e.target.value)}></input>
           </div>
           <div className="flex flex-col">
-            <div className="text-xs text-gray">Date</div>
+            <div className="text-xs text-gray">Date (YYYY-MM-DD)</div>
             <input className="px-2 bg-zinc-600 border-[2px] border-blue-500 rounded-md" placeholder="Date" onChange={(e:any) => setDate(e.target.value)}></input>
           </div>
           <div className="flex flex-col">
@@ -237,10 +265,10 @@ export default function Home() {
       <div className="flex flex-col w-full p-10 mx-auto my-auto rounded-md bg-zinc-800 border-[2px] border-zinc-700 overflow-hidden md:w-[650px]">
         <div className="flex flex-col justify-between">
           <button className="ml-[100%] mt-[-30px] text-xl hover:text-zinc-300" onClick={closeEventBox}>⨯</button>
-          <div className="mx-auto my-2 text-xl">{specificEvent?.event}</div>
+          <div className="mx-auto my-2 text-2xl font-semibold">{specificEvent?.event}</div>
         </div>
         <div className="flex flex-row justify-between">
-          <div>{specificEvent?.event}</div>
+          <div>{specificEvent?.university}</div>
           <div>${specificEvent?.price}</div>
         </div>
         <div className="flex flex-row justify-between">
@@ -249,7 +277,7 @@ export default function Home() {
         </div>
         <div className="mt-6">
           <div className="mx-auto w-fit text-lg">Comments:</div>
-          <div className="h-96 overflow-scroll rounded-md border-[2px] border-zinc-500 p-2">
+          <div className="h-72 overflow-scroll rounded-md border-[2px] border-zinc-500 p-2">
             {updatedComments}
           </div>
           <form onSubmit={addComment} data-key={specificEvent?._id}>
@@ -279,7 +307,7 @@ export default function Home() {
           <button className={`${e.university.toLowerCase().includes(schoolOfTheWeek.toLowerCase()) ? "flex flex-row w-full overflow-hidden justify-between text-white mx-0 my-4 rounded-md border-[2px] border-blue-500 shadow md:mx-6 md:w-[75%] transition ease-in-out hover:scale-105" : "flex flex-row w-full overflow-hidden justify-between text-white mx-0 my-2 rounded-md border-[2px] border-white shadow md:mx-6 md:w-[75%] transition ease-in-out hover:scale-105"}`} key={e.id} value={e} onClick={() => setSpecificEvent(e)}>
             <div className="flex flex-row gap-4">
               <Image src={imageObject[e.university.toLowerCase()]} alt="University logo" width={50} height={50} className="p-2"></Image>
-              <div className="my-auto w-[110px] overflow-hidden whitespace-nowrap text-ellipsis md:w-[150px]">{e.university}</div>
+              <div className="my-auto w-[110px] overflow-hidden whitespace-nowrap text-ellipsis md:w-[150px]">{e.event}</div>
             </div>
             <div className="my-auto mx-2">{e.date}</div>
           </button>
